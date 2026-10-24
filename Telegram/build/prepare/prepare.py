@@ -471,18 +471,16 @@ win:
     SET CHERE_INVOKING=enabled_from_arguments
     SET MSYS2_PATH_TYPE=inherit
 
-    powershell -Command "iwr -OutFile ./msys64.exe https://github.com/msys2/msys2-installer/releases/download/2025-08-30/msys2-base-x86_64-20250830.sfx.exe"
-    msys64.exe
-    del msys64.exe
+    if exist C:\\msys64 (
+        mklink /J msys64 C:\\msys64
+    ) else (
+        curl.exe -sSL -o msys64.exe https://github.com/msys2/msys2-installer/releases/download/2025-08-30/msys2-base-x86_64-20250830.sfx.exe
+        start /wait "" msys64.exe -y
+        del /f /q msys64.exe
+        bash -c "pacman-key --init; pacman-key --populate"
+    )
 
-    bash -c "pacman-key --init; pacman-key --populate; pacman -Syu --noconfirm"
-    pacman -Syu --noconfirm ^
-        make ^
-        mingw-w64-x86_64-diffutils ^
-        mingw-w64-x86_64-gperf ^
-        mingw-w64-x86_64-nasm ^
-        mingw-w64-x86_64-perl ^
-        mingw-w64-x86_64-pkgconf
+    bash -c "pacman -S --noconfirm --needed make mingw-w64-x86_64-diffutils mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm mingw-w64-x86_64-perl mingw-w64-x86_64-pkgconf"
 """, 'ThirdParty')
 
 stage('python', """
@@ -497,14 +495,14 @@ win:
 stage('NuGet', """
 win:
     mkdir NuGet
-    powershell -Command "iwr -OutFile ./NuGet/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+    curl.exe -sSL -o ./NuGet/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 """, 'ThirdParty')
 
 stage('jom', """
 win:
-    powershell -Command "iwr -OutFile ./jom.zip https://master.qt.io/official_releases/jom/jom_1_1_3.zip"
-    powershell -Command "Expand-Archive ./jom.zip"
-    del jom.zip
+    curl.exe -sSL -o ./jom.zip https://master.qt.io/official_releases/jom/jom_1_1_3.zip
+    tar -xf jom.zip
+    del /f /q jom.zip
 """, 'ThirdParty')
 
 if not mac or 'build-stackwalk' in options:
@@ -523,14 +521,14 @@ mac:
 rustToolchain = '1.96.1'
 stage('rust', """
 win:
-    powershell -Command "iwr -OutFile ./rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe"
+    curl.exe -sSL -o ./rustup-init.exe https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe
     SET "RUSTUP_HOME=%THIRDPARTY_DIR%\\rust\\rustup"
     SET "CARGO_HOME=%THIRDPARTY_DIR%\\rust\\cargo"
     rustup-init.exe -y --no-modify-path --profile minimal ^
         --default-toolchain """ + rustToolchain + """ ^
         --component rust-src ^
         --target aarch64-pc-windows-msvc
-    del rustup-init.exe
+    del /f /q rustup-init.exe
 mac:
     wget -O rustup-init.sh https://sh.rustup.rs
     export RUSTUP_HOME=$THIRDPARTY_DIR/rust/rustup

@@ -20,6 +20,7 @@ jobs:
 
     env:
       PREPARE_PATH: "Telegram/build/prepare/prepare.py"
+      Platform: "x64"
 
     defaults:
       run:
@@ -32,6 +33,7 @@ jobs:
           mklink /d %GITHUB_WORKSPACE%\TBuild %userprofile%\TBuild
           echo TBUILD=%GITHUB_WORKSPACE%\TBuild>>%GITHUB_ENV%
           echo LibrariesPath=%GITHUB_WORKSPACE%\TBuild\Libraries\win64>>%GITHUB_ENV%
+          echo Platform=x64>>%GITHUB_ENV%
 
       - name: Get repository name
         shell: bash
@@ -93,6 +95,12 @@ jobs:
             ${{ env.LibrariesPath }}\cache_keys\[qQ]t[_-]*
           key: ${{ runner.OS }}-x64-qt6-${{ env.CACHE_KEY }}
           restore-keys: ${{ runner.OS }}-x64-qt6-
+
+      - name: Setup MSYS64
+        run: |
+          mkdir "%TBUILD%\ThirdParty" 2>nul
+          if not exist "%TBUILD%\ThirdParty\msys64" mklink /J "%TBUILD%\ThirdParty\msys64" "C:\msys64"
+          C:\msys64\usr\bin\pacman.exe -S --noconfirm --needed make mingw-w64-x86_64-diffutils mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm mingw-w64-x86_64-perl mingw-w64-x86_64-pkgconf
 
       - name: Prepare Libraries
         run: |

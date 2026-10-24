@@ -22,7 +22,10 @@ win = (sys.platform == 'win32')
 mac = (sys.platform == 'darwin')
 
 if win and not 'Platform' in os.environ:
-    nativeToolsError()
+    if 'VSCMD_ARG_TGT_ARCH' in os.environ:
+        os.environ['Platform'] = os.environ['VSCMD_ARG_TGT_ARCH']
+    else:
+        os.environ['Platform'] = 'x64'
 
 win32 = win and (os.environ['Platform'] == 'x86')
 win64 = win and (os.environ['Platform'] == 'x64')

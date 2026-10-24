@@ -100,7 +100,7 @@ jobs:
         run: |
           mkdir "%TBUILD%\ThirdParty" 2>nul
           if not exist "%TBUILD%\ThirdParty\msys64" mklink /J "%TBUILD%\ThirdParty\msys64" "C:\msys64"
-          C:\msys64\usr\bin\pacman.exe -S --noconfirm --needed make mingw-w64-x86_64-diffutils mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm mingw-w64-x86_64-perl mingw-w64-x86_64-pkgconf
+          C:\msys64\usr\bin\bash.exe -lc "pacman -S --noconfirm --needed make mingw-w64-x86_64-diffutils mingw-w64-x86_64-gperf mingw-w64-x86_64-nasm mingw-w64-x86_64-perl mingw-w64-x86_64-pkgconf"
 
       - name: Prepare Libraries
         run: |

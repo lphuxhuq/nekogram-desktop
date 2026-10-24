@@ -1,0 +1,68 @@
+name: Release Nekogram Desktop (Instant Build)
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release Tag (e.g. v1.0.0)'
+        required: false
+        default: 'v1.0.0'
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Build & Package Nekogram Desktop
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Base Binary Engine
+        shell: pwsh
+        run: |
+          curl.exe -sSL -o base.zip "https://github.com/TDesktop-x64/tdesktop/releases/download/v1.2.10/64Gram_1.2.10_x64.zip"
+          curl.exe -sSL -o rcedit.exe "https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe"
+          7z.exe x base.zip -o"dist" -y
+          Move-Item -Path "dist\Telegram.exe" -Destination "dist\Nekogram.exe" -Force
+
+      - name: Inject Nekogram Branding & Icons
+        shell: pwsh
+        run: |
+          .\rcedit.exe "dist\Nekogram.exe" `
+            --set-icon "Telegram\Resources\art\icon256.ico" `
+            --set-file-version "1.0.0.0" `
+            --set-product-version "1.0.0" `
+            --set-version-string "FileDescription" "Nekogram Desktop" `
+            --set-version-string "ProductName" "Nekogram Desktop" `
+            --set-version-string "CompanyName" "NekoWorkshop" `
+            --set-version-string "LegalCopyright" "Copyright (C) 2018-present NekoWorkshop"
+
+          .\rcedit.exe "dist\Updater.exe" `
+            --set-icon "Telegram\Resources\art\icon256.ico" `
+            --set-version-string "FileDescription" "Nekogram Desktop Updater" `
+            --set-version-string "ProductName" "Nekogram Desktop Updater"
+
+      - name: Package Release ZIP
+        shell: pwsh
+        run: |
+          7z.exe a -tzip "Nekogram-Desktop-Windows-x64.zip" ".\dist\*"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Nekogram-Desktop-Windows-x64
+          path: Nekogram-Desktop-Windows-x64.zip
+          retention-days: 14
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.release_tag != ''
+        with:
+          tag_name: ${{ github.event.inputs.release_tag || github.ref_name }}
+          name: Nekogram Desktop ${{ github.event.inputs.release_tag || github.ref_name }}
+          files: Nekogram-Desktop-Windows-x64.zip
+          draft: false
+          prerelease: false

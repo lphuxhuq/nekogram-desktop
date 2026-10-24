@@ -31,6 +31,7 @@ namespace Settings {
 		void SetupEnhancedButton(not_null<Ui::VerticalLayout *> container);
 		void SetupEnhancedVoiceChat(not_null<Ui::VerticalLayout *> container);
 		void SetupEnhancedOthers(not_null<Window::SessionController*> controller, not_null<Ui::VerticalLayout *> container);
+		void SetupNekoLinks(not_null<Ui::VerticalLayout *> container);
 		void reqBlocked(int offset);
 		void writeBlocklistFile();
 

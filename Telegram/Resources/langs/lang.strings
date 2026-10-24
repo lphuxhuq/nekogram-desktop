@@ -8786,9 +8786,9 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_folder_archive_failed" = "Failed to create archive.";
 "lng_folder_archive_status" = "ZIP archive";
 
-"lng_intro_about2" = "Welcome to the 64Gram Desktop app.\nIt's fast and secure.";
+"lng_intro_about2" = "Welcome to the Nekogram Desktop app.\nIt's fast and secure.";
 
-"lng_settings_enhanced" = "Enhanced Settings";
+"lng_settings_enhanced" = "Neko Settings";
 "lng_settings_network" = "Network";
 "lng_settings_net_upload_speed_boost" = "Upload speed boost";
 "lng_settings_show_message_id" = "Show message ID";

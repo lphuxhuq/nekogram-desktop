@@ -4,6 +4,7 @@ the unofficial app based on Telegram Desktop.
 For license and copyright information please follow this link:
 https://github.com/TDesktop-x64/tdesktop/blob/dev/LEGAL
 */
+#include "core/file_utilities.h"
 #include <base/timer_rpl.h>
 #include <ui/toast/toast.h>
 #include <mainwindow.h>
@@ -575,6 +576,50 @@ namespace Settings {
 		AddSkip(container);
 	}
 
+	void Enhanced::SetupNekoLinks(not_null<Ui::VerticalLayout *> container) {
+		AddDivider(container);
+		AddSkip(container);
+		AddSubsectionTitle(container, rpl::single(u"Nekogram Links"_q));
+
+		AddButtonWithLabel(
+			container,
+			rpl::single(u"Official Channel"_q),
+			rpl::single(u"@nekoupdates"_q),
+			st::settingsButtonNoIcon
+		)->addClickHandler([] {
+			File::OpenUrl(u"https://t.me/nekoupdates"_q);
+		});
+
+		AddButtonWithLabel(
+			container,
+			rpl::single(u"Official Website"_q),
+			rpl::single(u"nekogram.app"_q),
+			st::settingsButtonNoIcon
+		)->addClickHandler([] {
+			File::OpenUrl(u"https://nekogram.app"_q);
+		});
+
+		AddButtonWithLabel(
+			container,
+			rpl::single(u"View Source Code"_q),
+			rpl::single(u"GitHub"_q),
+			st::settingsButtonNoIcon
+		)->addClickHandler([] {
+			File::OpenUrl(u"https://github.com/Nekogram/Nekogram"_q);
+		});
+
+		AddButtonWithLabel(
+			container,
+			rpl::single(u"Crowdin Translation"_q),
+			rpl::single(u"Crowdin"_q),
+			st::settingsButtonNoIcon
+		)->addClickHandler([] {
+			File::OpenUrl(u"https://neko.crowdin.com/nekogram"_q);
+		});
+
+		AddSkip(container);
+	}
+
 	rpl::producer<QString> Enhanced::title() {
 		return tr::lng_settings_enhanced();
 	}
@@ -594,6 +639,7 @@ namespace Settings {
 		SetupEnhancedButton(content);
 		SetupEnhancedVoiceChat(content);
 		SetupEnhancedOthers(controller, content);
+		SetupNekoLinks(content);
 
 		Ui::ResizeFitChild(this, content);
 	}

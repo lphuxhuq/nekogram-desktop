@@ -1,4 +1,4 @@
-﻿/*
+/*
 This file is part of Telegram Desktop,
 the official desktop application for the Telegram messaging service.
 
@@ -76,6 +76,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
+#include "settings/settings_enhanced.h"
 #include <core/enhanced_settings.h>
 
 #include <QtGui/QGuiApplication>
@@ -755,6 +756,13 @@ void MainMenu::setupMenu() {
 		{ &st::menuIconSettings }
 	)->setClickedCallback([=] {
 		controller->showSettings();
+	});
+
+	addAction(
+		tr::lng_settings_enhanced(),
+		{ &st::menuIconManage }
+	)->setClickedCallback([=] {
+		controller->showSettings(Settings::Enhanced::Id());
 	});
 
 	_nightThemeToggle = addAction(

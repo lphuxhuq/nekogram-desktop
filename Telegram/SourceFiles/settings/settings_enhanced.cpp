@@ -579,11 +579,11 @@ namespace Settings {
 	void Enhanced::SetupNekoLinks(not_null<Ui::VerticalLayout *> container) {
 		AddDivider(container);
 		AddSkip(container);
-		AddSubsectionTitle(container, rpl::single(u"Nekogram Links"_q));
+		AddSubsectionTitle(container, rpl::single(u"Liên kết Nekogram"_q));
 
 		AddButtonWithLabel(
 			container,
-			rpl::single(u"Official Channel"_q),
+			rpl::single(u"Kênh chính thức"_q),
 			rpl::single(u"@nekoupdates"_q),
 			st::settingsButtonNoIcon
 		)->addClickHandler([] {
@@ -592,7 +592,7 @@ namespace Settings {
 
 		AddButtonWithLabel(
 			container,
-			rpl::single(u"Official Website"_q),
+			rpl::single(u"Trang web chính thức"_q),
 			rpl::single(u"nekogram.app"_q),
 			st::settingsButtonNoIcon
 		)->addClickHandler([] {
@@ -601,7 +601,7 @@ namespace Settings {
 
 		AddButtonWithLabel(
 			container,
-			rpl::single(u"View Source Code"_q),
+			rpl::single(u"Mã nguồn mở"_q),
 			rpl::single(u"GitHub"_q),
 			st::settingsButtonNoIcon
 		)->addClickHandler([] {
@@ -610,7 +610,7 @@ namespace Settings {
 
 		AddButtonWithLabel(
 			container,
-			rpl::single(u"Crowdin Translation"_q),
+			rpl::single(u"Dự án dịch thuật"_q),
 			rpl::single(u"Crowdin"_q),
 			st::settingsButtonNoIcon
 		)->addClickHandler([] {

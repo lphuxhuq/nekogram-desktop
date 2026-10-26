@@ -33,6 +33,7 @@ jobs:
       - name: Inject Nekogram Branding & Icons
         shell: pwsh
         run: |
+          python scripts/patch_binary.py dist/Nekogram.exe
           .\rcedit.exe "dist\Nekogram.exe" `
             --set-icon "Telegram\Resources\art\icon256.ico" `
             --set-file-version "1.0.0.0" `

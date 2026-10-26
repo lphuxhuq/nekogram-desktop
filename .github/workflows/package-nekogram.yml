@@ -48,6 +48,11 @@ jobs:
             --set-version-string "FileDescription" "Nekogram Desktop Updater" `
             --set-version-string "ProductName" "Nekogram Desktop Updater"
 
+      - name: Copy Nekogram Desktop Themes
+        shell: pwsh
+        run: |
+          Copy-Item -Path "Themes" -Destination "dist\Themes" -Recurse -Force
+
       - name: Package Release ZIP
         shell: pwsh
         run: |
